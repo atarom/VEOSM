@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>VEOSM</title>
+<meta name="description" content="Explore OpenStreetMap tag values by area with Postpass or Overpass." />
+<link rel="icon" href="./logo.png" type="image/png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.11.1/dist/maplibre-gl.css" />
+<link rel="stylesheet" href="./style.css" />
+<script type="module" src="./script.js"></script>
+</head>
+<body>
+<div id="app" class="app">
+<header class="topbar">
+<div class="logo">VEOSM</div>
+<label class="config-field engine-field"><span>Engine</span><select id="query-engine" aria-label="Query engine"><option value="postpass">Postpass</option><option value="overpass">Overpass</option></select></label>
+<label id="overpass-config" class="config-field engine-config" hidden><span>Server</span><select id="overpass-server" aria-label="Overpass server"><option value="https://maps.mail.ru/osm/tools/overpass/api/interpreter">🇷🇺 maps.mail.ru</option><option value="https://overpass-api.de/api/interpreter">🇩🇪 overpass-api.de</option></select></label>
+<form id="search-form" class="search" novalidate>
+<label class="search-field search-area"><span>Area</span><input id="query" class="search-input" type="text" autocomplete="off" value="Spain" placeholder="Area (e.g. Spain)" required /></label>
+<label class="search-field search-key"><span>Key</span><input id="key" class="key-input" type="text" autocomplete="off" value="fixme" placeholder="Key (e.g. fixme)" required /></label>
+<button class="search-btn" type="submit">Search</button>
+</form>
+</header>
+<main class="main">
+<section class="panel groups-panel">
+<div class="groups-summary">
+<div class="summary-title">Area</div>
+<div class="summary-area-line"><span id="stat-area" class="summary-area-text">–</span></div>
+<div class="summary-meta"><div class="summary-meta-left"><span class="summary-meta-label">Key</span><span id="stat-key" class="summary-meta-value">fixme</span></div><label class="multi-toggle"><input id="multi-toggle" type="checkbox" /><span class="multi-toggle-track"><span class="multi-toggle-thumb"></span></span><span class="multi-toggle-label">Multi-values only ";"</span></label></div>
+<div class="summary-stats"><div class="summary-stat"><span class="summary-stat-value" id="stat-elements">0</span><span class="summary-stat-label">Elements</span></div><div class="summary-stat"><span class="summary-stat-value" id="stat-groups">0</span><span class="summary-stat-label">Unique values</span></div></div>
+</div>
+<div class="groups-header"><span id="groups-header-key" class="groups-header-label">Value of "fixme"</span><span class="groups-header-label groups-header-count">Elements</span></div>
+<div id="groups-list" class="groups-list"><div class="empty-state">Enter an area and key, then press Search to view grouped values.</div></div>
+</section>
+<section class="panel map-panel"><div class="panel-header">Centroid map</div><div id="map" class="map"></div></section>
+</main>
+</div>
+<div id="overlay" class="ov" hidden role="dialog" aria-modal="true" aria-labelledby="overlay-title"><div class="overlay-inner"><div class="overlay-header"><span id="overlay-title">Processes</span><button id="overlay-close" class="overlay-close" type="button" title="Close" aria-label="Close">✕</button></div><pre id="overlay-log" aria-live="polite"></pre></div></div>
+</body>
+</html>
