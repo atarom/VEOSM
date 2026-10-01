@@ -1,9 +1,7 @@
 <div align="center">
   <img src="logo.png" alt="VEOSM logo" width="512">
 
-  <h1>VEOSM</h1>
-
-  <p>OpenStreetMap tag value explorer.</p>
+  <h1>Value Explorer Openstreetmap</h1>
 
   <p>
     <a href="https://atarom.github.io/VEOSM/">
