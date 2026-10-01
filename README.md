@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="logo.png" alt="VEOSM logo" width="180">
+  <img src="logo.png" alt="VEOSM logo" width="512">
 
   <h1>VEOSM</h1>
 
