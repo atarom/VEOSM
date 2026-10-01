@@ -24,7 +24,7 @@ VEOSM supports queries through **Postpass** or the **Overpass API**, and can fil
 - [Overpass API](https://overpass-api.de/) — alternative OpenStreetMap data query service.
 - [Nominatim](https://nominatim.org/) — place search and area resolution.
 - [JetBrains Mono](https://www.jetbrains.com/lp/mono/) — interface typeface.
-- © [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) — data available under the ODbL.
+- [OpenStreetMap contributors](https://www.openstreetmap.org/copyright) — data available under the ODbL.
 
 ## Repository
 
