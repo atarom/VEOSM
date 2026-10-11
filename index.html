@@ -11,6 +11,13 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@6.11.1/dist/maplibre-gl.css" />
 <link rel="stylesheet" href="./style.css" />
+<style>
+.summary-meta { flex-wrap: wrap; }
+.summary-meta-left { overflow: hidden; }
+.summary-meta-value { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.count-mode { margin-left: auto; }
+.count-mode select { height: 28px; padding: 0 26px 0 8px; font-size: 0.67rem; }
+</style>
 <script type="module" src="./script.js"></script>
 </head>
 <body>
@@ -30,10 +37,10 @@
 <div class="groups-summary">
 <div class="summary-title">Area</div>
 <div class="summary-area-line"><span id="stat-area" class="summary-area-text">–</span></div>
-<div class="summary-meta"><div class="summary-meta-left"><span class="summary-meta-label">Key</span><span id="stat-key" class="summary-meta-value">fixme</span></div><label class="multi-toggle"><input id="multi-toggle" type="checkbox" /><span class="multi-toggle-track"><span class="multi-toggle-thumb"></span></span><span class="multi-toggle-label">Multi-values only ";"</span></label></div>
-<div class="summary-stats"><div class="summary-stat"><span class="summary-stat-value" id="stat-elements">0</span><span class="summary-stat-label">Elements</span></div><div class="summary-stat"><span class="summary-stat-value" id="stat-groups">0</span><span class="summary-stat-label">Unique values</span></div></div>
+<div class="summary-meta"><div class="summary-meta-left"><span class="summary-meta-label">Key</span><span id="stat-key" class="summary-meta-value">fixme</span></div><label class="config-field count-mode"><span>Count by</span><select id="count-mode" aria-label="Count by"><option value="value">Full values</option><option value="multi">Multi-values only ";"</option><option value="word">Words</option></select></label></div>
+<div class="summary-stats"><div class="summary-stat"><span class="summary-stat-value" id="stat-elements">0</span><span class="summary-stat-label">Elements</span></div><div class="summary-stat"><span class="summary-stat-value" id="stat-groups">0</span><span id="stat-groups-label" class="summary-stat-label">Unique values</span></div></div>
 </div>
-<div class="groups-header"><span id="groups-header-key" class="groups-header-label">Value of "fixme"</span><span class="groups-header-label groups-header-count">Elements</span></div>
+<div class="groups-header"><span id="groups-header-key" class="groups-header-label">Value of "fixme"</span><span id="groups-header-count" class="groups-header-label groups-header-count">Elements</span></div>
 <div id="groups-list" class="groups-list"><div class="empty-state">Enter an area and key, then press Search to view grouped values.</div></div>
 </section>
 <section class="panel map-panel"><div class="panel-header">Centroid map</div><div id="map" class="map"></div></section>

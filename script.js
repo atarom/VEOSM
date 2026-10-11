@@ -21,7 +21,7 @@ const S = {
   bounds: null,
   locked: false,
   key: "fixme",
-  multi: false,
+  mode: "value",
   area: "–",
   engine: "postpass",
   op: OPS[0][0],
@@ -163,7 +163,9 @@ const stats = (n = 0, g = 0, area = "–", key = S.key) => {
   $("#stat-groups").textContent = g;
   $("#stat-area").textContent = area;
   $("#stat-key").textContent = key;
-  $("#groups-header-key").textContent = `Value of "${key}"`;
+  $("#groups-header-key").textContent = S.mode === "word" ? `Words in "${key}"` : `Value of "${key}"`;
+  $("#groups-header-count").textContent = S.mode === "word" ? "Occurrences" : "Elements";
+  $("#stat-groups-label").textContent = S.mode === "word" ? "Unique words" : "Unique values";
 };
 const closePopup = () => {
   if (!S.popup) return;
@@ -270,26 +272,23 @@ const group = () => {
   const m = new Map();
   const used = new Set();
   S.items.forEach((e, i) => {
-    if (!S.multi) {
-      if (!m.has(e.value)) m.set(e.value, new Set());
-      m.get(e.value).add(i);
-      used.add(i);
-      return;
-    }
-    const values = e.value
-      .split(";")
-      .map((v) => v.trim())
-      .filter(Boolean);
-    if (values.length < 2) return;
+    const values = S.mode === "word"
+      ? e.value.normalize("NFC").toLocaleLowerCase("es").normalize("NFC").match(/\p{L}[\p{L}\p{M}\p{N}]*/gu) || []
+      : S.mode === "multi"
+        ? e.value.split(";").map((v) => v.trim()).filter(Boolean)
+        : [e.value];
+    if (!values.length || S.mode === "multi" && values.length < 2) return;
     used.add(i);
-    new Set(values).forEach((v) => {
-      if (!m.has(v)) m.set(v, new Set());
-      m.get(v).add(i);
-    });
+    for (const value of S.mode === "word" ? values : new Set(values)) {
+      if (!m.has(value)) m.set(value, { count: 0, elements: new Set() });
+      const entry = m.get(value);
+      entry.count++;
+      entry.elements.add(i);
+    }
   });
   S.groups = [...m]
-    .map(([value, set]) => ({ value, count: set.size, elements: [...set] }))
-    .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value));
+    .map(([value, entry]) => ({ value, count: entry.count, elements: [...entry.elements] }))
+    .sort((a, b) => b.count - a.count || a.value.localeCompare(b.value, "es"));
   S.sel = null;
   closePopup();
   renderGroups();
@@ -452,7 +451,7 @@ const search = async () => {
   ].join("|");
   if (!name || !key) return overlay("Enter an area and key.");
   S.key = key;
-  S.multi = $("#multi-toggle").checked;
+  S.mode = $("#count-mode").value;
   searching = true;
   button.disabled = true;
   button.textContent = "Searching…";
@@ -600,12 +599,14 @@ const initMap = () => {
 const restore = () => {
   const eng = store("veosm_engine");
   const op = store("veosm_overpass");
+  const mode = store("veosm_mode");
   const multi = store("veosm_multi");
   if (["postpass", "overpass"].includes(eng)) S.engine = eng;
   if (OPS.some((x) => x[0] === op)) S.op = op;
-  if (multi !== null) S.multi = multi === "true";
+  if (["value", "multi", "word"].includes(mode)) S.mode = mode;
+  else if (multi === "true") S.mode = "multi";
   $("#overpass-server").value = S.op;
-  $("#multi-toggle").checked = S.multi;
+  $("#count-mode").value = S.mode;
   uiEngine();
 };
 const init = () => {
@@ -636,10 +637,11 @@ const init = () => {
     store("veosm_overpass", S.op);
     cancelCacheWait();
   };
-  $("#multi-toggle").onchange = (e) => {
-    S.multi = e.target.checked;
-    store("veosm_multi", S.multi);
+  $("#count-mode").onchange = (e) => {
+    S.mode = e.target.value;
+    store("veosm_mode", S.mode);
     if (S.items.length) group();
+    else stats(0, 0, S.area, S.key);
   };
 };
 init();
